@@ -24,7 +24,7 @@ function Page() {
         <p className="text-muted-foreground mt-1 text-sm">Profile, billing, team and integrations.</p>
       </div>
       <StageNotice
-        icon={{Settings}}
+        icon={Settings}
         title="Coming in a later build stage"
         description="Profile details, plan and usage meters, team seats and integration health are wired up in a later stage."
       />

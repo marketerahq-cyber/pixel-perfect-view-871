@@ -24,7 +24,7 @@ function Page() {
         <p className="text-muted-foreground mt-1 text-sm">Cash flow, payment speed and channel performance.</p>
       </div>
       <StageNotice
-        icon={{BarChart3}}
+        icon={BarChart3}
         title="Coming in a later build stage"
         description="Days-to-pay trends, channel effectiveness and top late payers arrive with the insight layer stage."
       />

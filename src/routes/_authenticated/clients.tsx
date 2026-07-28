@@ -24,7 +24,7 @@ function Page() {
         <p className="text-muted-foreground mt-1 text-sm">Client profiles, history and reliability badges.</p>
       </div>
       <StageNotice
-        icon={{Users}}
+        icon={Users}
         title="Coming in a later build stage"
         description="Client list, payment history and per-client reminder overrides are built in the next stage."
       />

@@ -24,7 +24,7 @@ function Page() {
         <p className="text-muted-foreground mt-1 text-sm">Your automatic follow-up sequences.</p>
       </div>
       <StageNotice
-        icon={{BellRing}}
+        icon={BellRing}
         title="Coming in a later build stage"
         description="The schedule editor, message templates with merge fields and the delivery activity log come with the reminder engine stage."
       />

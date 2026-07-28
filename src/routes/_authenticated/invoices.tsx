@@ -24,7 +24,7 @@ function Page() {
         <p className="text-muted-foreground mt-1 text-sm">Create, send and track every invoice.</p>
       </div>
       <StageNotice
-        icon={{FileText}}
+        icon={FileText}
         title="Coming in a later build stage"
         description="The sortable invoice table, filter bar and the two-column invoice builder with live branded preview are built in the next stage."
       />
