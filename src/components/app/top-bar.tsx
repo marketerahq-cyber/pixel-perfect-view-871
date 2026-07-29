@@ -40,11 +40,12 @@ export function TopBar({ email, initials }: { email?: string; initials: string }
       <Button
         variant="hero"
         className="ml-auto md:ml-0"
-        onClick={() => toast("Invoice builder arrives in the next build stage.")}
+        onClick={() => navigate({ to: "/invoices/new" })}
       >
         <Plus />
         <span className="hidden sm:inline">New Invoice</span>
       </Button>
+
 
       <Button
         variant="ghost"
