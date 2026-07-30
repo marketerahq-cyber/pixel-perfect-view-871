@@ -24,6 +24,7 @@ export type Database = {
           name: string
           notes: string | null
           phone: string | null
+          reliability_score: number | null
           updated_at: string
           user_id: string
         }
@@ -36,6 +37,7 @@ export type Database = {
           name: string
           notes?: string | null
           phone?: string | null
+          reliability_score?: number | null
           updated_at?: string
           user_id: string
         }
@@ -48,6 +50,7 @@ export type Database = {
           name?: string
           notes?: string | null
           phone?: string | null
+          reliability_score?: number | null
           updated_at?: string
           user_id?: string
         }
@@ -108,13 +111,18 @@ export type Database = {
           invoice_number: string
           issue_date: string
           notes: string | null
+          paid_amount: number
           paid_at: string | null
+          payment_link: string | null
+          reminders_paused: boolean
+          sent_at: string | null
           status: Database["public"]["Enums"]["invoice_status"]
           subtotal: number
           tax_rate: number
           total: number
           updated_at: string
           user_id: string
+          viewed_at: string | null
         }
         Insert: {
           client_id?: string | null
@@ -126,13 +134,18 @@ export type Database = {
           invoice_number: string
           issue_date?: string
           notes?: string | null
+          paid_amount?: number
           paid_at?: string | null
+          payment_link?: string | null
+          reminders_paused?: boolean
+          sent_at?: string | null
           status?: Database["public"]["Enums"]["invoice_status"]
           subtotal?: number
           tax_rate?: number
           total?: number
           updated_at?: string
           user_id: string
+          viewed_at?: string | null
         }
         Update: {
           client_id?: string | null
@@ -144,13 +157,18 @@ export type Database = {
           invoice_number?: string
           issue_date?: string
           notes?: string | null
+          paid_amount?: number
           paid_at?: string | null
+          payment_link?: string | null
+          reminders_paused?: boolean
+          sent_at?: string | null
           status?: Database["public"]["Enums"]["invoice_status"]
           subtotal?: number
           tax_rate?: number
           total?: number
           updated_at?: string
           user_id?: string
+          viewed_at?: string | null
         }
         Relationships: [
           {
@@ -158,6 +176,53 @@ export type Database = {
             columns: ["client_id"]
             isOneToOne: false
             referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payments: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          invoice_id: string
+          method: string
+          paid_at: string
+          reference: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount?: number
+          created_at?: string
+          id?: string
+          invoice_id: string
+          method?: string
+          paid_at?: string
+          reference?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          invoice_id?: string
+          method?: string
+          paid_at?: string
+          reference?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
             referencedColumns: ["id"]
           },
         ]
@@ -172,6 +237,10 @@ export type Database = {
           id: string
           invoice_number_format: string
           logo_url: string | null
+          notify_invoice_overdue: boolean
+          notify_payment_received: boolean
+          notify_reminder_sent: boolean
+          notify_weekly_digest: boolean
           onboarded: boolean
           plan: Database["public"]["Enums"]["plan_tier"]
           plan_renews_at: string | null
@@ -186,6 +255,10 @@ export type Database = {
           id: string
           invoice_number_format?: string
           logo_url?: string | null
+          notify_invoice_overdue?: boolean
+          notify_payment_received?: boolean
+          notify_reminder_sent?: boolean
+          notify_weekly_digest?: boolean
           onboarded?: boolean
           plan?: Database["public"]["Enums"]["plan_tier"]
           plan_renews_at?: string | null
@@ -200,12 +273,123 @@ export type Database = {
           id?: string
           invoice_number_format?: string
           logo_url?: string | null
+          notify_invoice_overdue?: boolean
+          notify_payment_received?: boolean
+          notify_reminder_sent?: boolean
+          notify_weekly_digest?: boolean
           onboarded?: boolean
           plan?: Database["public"]["Enums"]["plan_tier"]
           plan_renews_at?: string | null
           updated_at?: string
         }
         Relationships: []
+      }
+      reminder_logs: {
+        Row: {
+          channel: string
+          created_at: string
+          delivery_status: string
+          id: string
+          invoice_id: string
+          message: string | null
+          opened_at: string | null
+          resulted_in_payment: boolean
+          sent_at: string
+          step_index: number
+          step_label: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          channel?: string
+          created_at?: string
+          delivery_status?: string
+          id?: string
+          invoice_id: string
+          message?: string | null
+          opened_at?: string | null
+          resulted_in_payment?: boolean
+          sent_at?: string
+          step_index?: number
+          step_label?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          channel?: string
+          created_at?: string
+          delivery_status?: string
+          id?: string
+          invoice_id?: string
+          message?: string | null
+          opened_at?: string | null
+          resulted_in_payment?: boolean
+          sent_at?: string
+          step_index?: number
+          step_label?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reminder_logs_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reminder_schedules: {
+        Row: {
+          client_id: string | null
+          created_at: string
+          id: string
+          invoice_id: string | null
+          is_default: boolean
+          name: string
+          steps: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          client_id?: string | null
+          created_at?: string
+          id?: string
+          invoice_id?: string | null
+          is_default?: boolean
+          name?: string
+          steps?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          client_id?: string | null
+          created_at?: string
+          id?: string
+          invoice_id?: string | null
+          is_default?: boolean
+          name?: string
+          steps?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reminder_schedules_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reminder_schedules_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
@@ -215,7 +399,13 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      invoice_status: "draft" | "sent" | "paid" | "overdue" | "cancelled"
+      invoice_status:
+        | "draft"
+        | "sent"
+        | "viewed"
+        | "paid"
+        | "overdue"
+        | "cancelled"
       plan_tier: "free" | "pro" | "business"
     }
     CompositeTypes: {
@@ -344,7 +534,14 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      invoice_status: ["draft", "sent", "paid", "overdue", "cancelled"],
+      invoice_status: [
+        "draft",
+        "sent",
+        "viewed",
+        "paid",
+        "overdue",
+        "cancelled",
+      ],
       plan_tier: ["free", "pro", "business"],
     },
   },

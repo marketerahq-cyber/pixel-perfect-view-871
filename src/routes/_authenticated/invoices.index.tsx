@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatMoney } from "@/lib/currency";
+import { STATUS_TONE, INVOICE_STATUSES } from "@/lib/invoice-status";
 import {
   useDeleteInvoice,
   useInvoices,
@@ -48,13 +49,7 @@ export const Route = createFileRoute("/_authenticated/invoices/")({
   component: InvoicesPage,
 });
 
-const STATUS_TONE: Record<Invoice["status"], string> = {
-  draft: "bg-secondary text-secondary-foreground",
-  sent: "bg-info/15 text-info",
-  paid: "bg-success/15 text-success",
-  overdue: "bg-accent/15 text-accent",
-  cancelled: "bg-muted text-muted-foreground",
-};
+
 
 function InvoicesPage() {
   const { data: invoices, isLoading } = useInvoices();
@@ -99,7 +94,7 @@ function InvoicesPage() {
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent>
-                {["all", "draft", "sent", "paid", "overdue", "cancelled"].map((s) => (
+                {["all", ...INVOICE_STATUSES].map((s) => (
                   <SelectItem key={s} value={s} className="capitalize">
                     {s === "all" ? "All statuses" : s}
                   </SelectItem>
