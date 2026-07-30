@@ -156,7 +156,7 @@ function InvoiceDetailPage() {
               />
             )}
             {Number(invoice.tax_rate) > 0 && (
-              <Row label={`Tax (${invoice.tax_rate}%)`} value={formatMoney(Number(invoice.tax_amount ?? 0), invoice.currency)} />
+              <Row label={`Tax (${invoice.tax_rate}%)`} value={formatMoney((Number(invoice.subtotal) - Number(invoice.discount ?? 0)) * (Number(invoice.tax_rate) / 100), invoice.currency)} />
             )}
             <div className="flex justify-between pt-1 text-base font-semibold">
               <span>Total</span>
