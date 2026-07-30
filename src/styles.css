@@ -225,3 +225,16 @@
 @utility shadow-glow {
   box-shadow: var(--shadow-glow);
 }
+
+/* Tiva guide gestures */
+@keyframes tiva-tilt { 0%,100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } }
+@keyframes tiva-wave { 0%,100% { transform: rotate(0deg); } 50% { transform: rotate(-22deg); } }
+@keyframes tiva-bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@keyframes tiva-point { 0%,100% { transform: translateX(0); } 50% { transform: translateX(3px); } }
+.tiva-tilt { animation: tiva-tilt 4s ease-in-out infinite; }
+.tiva-wave { animation: tiva-wave 1.2s ease-in-out infinite; }
+.tiva-bounce { animation: tiva-bounce 1.6s ease-in-out infinite; }
+.tiva-point { animation: tiva-point 1.4s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .tiva-tilt, .tiva-wave, .tiva-bounce, .tiva-point { animation: none; }
+}
