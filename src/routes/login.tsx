@@ -3,12 +3,12 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
-import { AuthShell, GoogleIcon } from "@/components/auth/auth-shell";
+import { AuthShell } from "@/components/auth/auth-shell";
+import { SocialAuthButtons } from "@/components/auth/social-auth-buttons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
 
 const TITLE = "Log in | Reach by MarketEra";
 const DESCRIPTION = "Log in to Reach to send invoices and let automatic reminders chase payment.";
@@ -32,21 +32,6 @@ function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [googleLoading, setGoogleLoading] = useState(false);
-
-  async function handleGoogle() {
-    setGoogleLoading(true);
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
-    });
-    if (result.error) {
-      setGoogleLoading(false);
-      toast.error(result.error.message ?? "Google sign-in failed.");
-      return;
-    }
-    if (result.redirected) return;
-    navigate({ to: "/dashboard" });
-  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -58,18 +43,6 @@ function LoginPage() {
       return;
     }
     navigate({ to: "/dashboard" });
-  }
-
-  async function handleReset() {
-    if (!email) {
-      toast.error("Enter your email first, then tap reset.");
-      return;
-    }
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/reset-password`,
-    });
-    if (error) toast.error(error.message);
-    else toast.success("Password reset link sent — check your inbox.");
   }
 
   return (
@@ -85,22 +58,14 @@ function LoginPage() {
         </>
       }
     >
-      <Button
-        variant="outline"
-        size="lg"
-        className="w-full"
-        onClick={handleGoogle}
-        disabled={googleLoading}
-      >
-        {googleLoading ? <Loader2 className="animate-spin" /> : <GoogleIcon className="h-4 w-4" />}
-        Continue with Google
-      </Button>
+      <SocialAuthButtons mode="login" />
 
       <div className="text-muted-foreground my-6 flex items-center gap-3 text-xs">
         <span className="bg-border h-px flex-1" />
         or log in with email
         <span className="bg-border h-px flex-1" />
       </div>
+
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
