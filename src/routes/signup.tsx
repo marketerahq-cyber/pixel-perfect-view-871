@@ -3,12 +3,12 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
-import { AuthShell, GoogleIcon } from "@/components/auth/auth-shell";
+import { AuthShell } from "@/components/auth/auth-shell";
+import { SocialAuthButtons } from "@/components/auth/social-auth-buttons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
 
 const TITLE = "Create your account | Reach by MarketEra";
 const DESCRIPTION =
@@ -35,21 +35,6 @@ function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [googleLoading, setGoogleLoading] = useState(false);
-
-  async function handleGoogle() {
-    setGoogleLoading(true);
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
-    });
-    if (result.error) {
-      setGoogleLoading(false);
-      toast.error(result.error.message ?? "Google sign-up failed.");
-      return;
-    }
-    if (result.redirected) return;
-    navigate({ to: "/dashboard" });
-  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -87,16 +72,7 @@ function SignupPage() {
         </>
       }
     >
-      <Button
-        variant="outline"
-        size="lg"
-        className="w-full"
-        onClick={handleGoogle}
-        disabled={googleLoading}
-      >
-        {googleLoading ? <Loader2 className="animate-spin" /> : <GoogleIcon className="h-4 w-4" />}
-        Continue with Google
-      </Button>
+      <SocialAuthButtons mode="signup" />
 
       <div className="text-muted-foreground my-6 flex items-center gap-3 text-xs">
         <span className="bg-border h-px flex-1" />
