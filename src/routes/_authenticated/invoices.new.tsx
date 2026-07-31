@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeft, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, UserPlus } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -117,6 +117,34 @@ function NewInvoicePage() {
         onError: (error: unknown) =>
           toast.error(error instanceof Error ? error.message : "Could not save the invoice"),
       },
+    );
+  }
+
+  // An invoice needs someone to send it to — send them to Clients first.
+  if (clients && clients.length === 0) {
+    return (
+      <div className="mx-auto w-full max-w-xl py-10">
+        <Card className="shadow-card text-center">
+          <CardContent className="p-8">
+            <div className="bg-accent/10 text-accent mx-auto flex h-14 w-14 items-center justify-center rounded-2xl">
+              <UserPlus className="h-7 w-7" />
+            </div>
+            <h1 className="mt-4 text-xl font-semibold tracking-tight">Add a client first</h1>
+            <p className="text-muted-foreground mx-auto mt-2 max-w-sm text-sm leading-relaxed">
+              Invoices and follow-ups are addressed to a client, so Reach needs one name and email
+              before you can bill. It takes about ten seconds.
+            </p>
+            <div className="mt-6 flex flex-wrap justify-center gap-2">
+              <Button variant="hero" onClick={() => navigate({ to: "/clients" })}>
+                <UserPlus /> Add your first client
+              </Button>
+              <Button variant="ghost" onClick={() => navigate({ to: "/invoices" })}>
+                Back to invoices
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     );
   }
 
