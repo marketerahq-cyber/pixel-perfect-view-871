@@ -72,16 +72,7 @@ function SignupPage() {
         </>
       }
     >
-      <Button
-        variant="outline"
-        size="lg"
-        className="w-full"
-        onClick={handleGoogle}
-        disabled={googleLoading}
-      >
-        {googleLoading ? <Loader2 className="animate-spin" /> : <GoogleIcon className="h-4 w-4" />}
-        Continue with Google
-      </Button>
+      <SocialAuthButtons mode="signup" />
 
       <div className="text-muted-foreground my-6 flex items-center gap-3 text-xs">
         <span className="bg-border h-px flex-1" />
