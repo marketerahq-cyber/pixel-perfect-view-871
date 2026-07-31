@@ -32,14 +32,19 @@ const items = [
 ] as const;
 
 export function AppSidebar() {
-  const { state } = useSidebar();
+  const { state, isMobile, setOpenMobile } = useSidebar();
   const collapsed = state === "collapsed";
   const pathname = useRouterState({ select: (r) => r.location.pathname });
+
+  // On mobile the sidebar is a sheet — close it as soon as a link is tapped.
+  const closeOnMobile = () => {
+    if (isMobile) setOpenMobile(false);
+  };
 
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="h-16 justify-center px-3">
-        <Link to="/dashboard" className="flex items-center">
+        <Link to="/dashboard" className="flex items-center" onClick={closeOnMobile}>
           <ReachLogo compact={collapsed} />
         </Link>
       </SidebarHeader>
@@ -53,7 +58,7 @@ export function AppSidebar() {
                 return (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild isActive={active} tooltip={item.title}>
-                      <Link to={item.url} className="flex items-center gap-3">
+                      <Link to={item.url} className="flex items-center gap-3" onClick={closeOnMobile}>
                         <item.icon className="h-[18px] w-[18px]" />
                         {!collapsed && <span>{item.title}</span>}
                       </Link>
