@@ -83,13 +83,12 @@ function LoginPage() {
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <Label htmlFor="password">Password</Label>
-            <button
-              type="button"
-              onClick={handleReset}
+            <Link
+              to="/forgot-password"
               className="text-muted-foreground hover:text-accent text-xs"
             >
               Forgot password?
-            </button>
+            </Link>
           </div>
           <Input
             id="password"
